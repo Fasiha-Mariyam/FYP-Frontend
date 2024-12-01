@@ -157,7 +157,6 @@ const Login = () => {
         <Box
           sx={{
             ...loginRight,
-            ml: is900Less ? 20 : 0,
             mr: "auto",
           }}
         >

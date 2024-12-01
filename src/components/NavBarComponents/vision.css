@@ -1,0 +1,44 @@
+
+.animated-heading {
+    color: green; 
+    animation: heading-animation 5s ease-in-out infinite; 
+  }
+.green-heading {
+    position: relative;
+  }
+  
+  .green-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; 
+    left: 0;
+    width: 0; 
+    height: 2px; 
+    background: linear-gradient(to right, #ff0000, #00ff00, #0000ff); 
+    animation: underline-animation 2s linear infinite; 
+  }
+  
+  @keyframes underline-animation {
+    0% {
+      width: 0;
+    }
+    50% {
+      width: 100%; 
+    }
+    100% {
+      width: 0; 
+    }
+  }
+  
+  @keyframes heading-animation {
+    0% {
+      transform: translateY(0); 
+    }
+    50% {
+      transform: translateY(-10px); 
+    }
+    100% {
+      transform: translateY(0); 
+    }
+  }
+  

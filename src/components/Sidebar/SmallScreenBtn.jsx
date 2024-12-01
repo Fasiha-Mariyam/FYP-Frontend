@@ -6,11 +6,9 @@ import Container from "@mui/material/Container";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import loggedout from "../../assets/images/loggedout.png";
-import style from "../../assets/images/style=fill.png";
-import Ellipse from "../../assets/images/Ellipse 9.png";
+import LogoutIcon from '@mui/icons-material/Logout';
 
-const settings = [loggedout, style, Ellipse];
+const settings = [LogoutIcon];
 
 function SmallScreenBtn() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -46,15 +44,9 @@ function SmallScreenBtn() {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting, index) => (
-          <MenuItem key={index} onClick={handleCloseUserMenu}>
-            <img
-              src={setting}
-              alt=""
-              style={{ width: "20px", height: "24px" }}
-            />
+          <MenuItem onClick={handleCloseUserMenu}>
+            <LogoutIcon/>
           </MenuItem>
-        ))}
       </Menu>
     </Box>
   );

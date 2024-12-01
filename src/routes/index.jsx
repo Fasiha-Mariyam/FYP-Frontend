@@ -10,20 +10,24 @@ import BackToTop from "../components/Navbar/Navbar"
 import Layout from "../layout/Layout";
 import StudentRoutes from "./StudentRoutes";
 import AdminRoutes from "./AdminRoutes";
+import Chat from "../pages/MainFlow/Chat/Chat"
+import DriverRoutes from "./DriverRoutes";
+import 'leaflet/dist/leaflet.css';
+
 
 
 const RoutesIndex = () => {
- 
-
 
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<UnProtectedRoutes Component={BackToTop} />} />
         <Route path="/login" element={<UnProtectedRoutes Component={Login} />} />
+        <Route path="/chat" element={<UnProtectedRoutes Component={Chat} />} />
         <Route path="/signup" element={<UnProtectedRoutes Component={Signup} />} />
-        <Route path="/student/*" element={<UnProtectedRoutes Component={StudentRoutes} />} />
-        <Route path="/admin/*" element={<UnProtectedRoutes Component={AdminRoutes} />} />
+        <Route path="/student/*" element={<ProtectedRoutes Component={StudentRoutes} />} />
+        <Route path="/admin/*" element={<ProtectedRoutes Component={AdminRoutes} />} />
+        <Route path="/driver/*" element={<ProtectedRoutes Component={DriverRoutes} />} />
       </Routes>
 
     </Layout>

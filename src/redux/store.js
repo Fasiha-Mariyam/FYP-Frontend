@@ -6,7 +6,8 @@ import {
 import { persistReducer, persistStore } from "redux-persist";
 
 import { rootPersistConfig, rootReducer } from "./rootReducer";
-import { resetAuth } from "./slices/auth";
+import { resetAuth  } from "./slices/auth";
+import {resetCard} from "./slices/card"
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ const { dispatch } = store;
 export function logOut() {
   return async () => {
     await dispatch(resetAuth());
+    // await dispatch(resetCard());
     await persistor.purge();
     await localStorage.clear();
   };

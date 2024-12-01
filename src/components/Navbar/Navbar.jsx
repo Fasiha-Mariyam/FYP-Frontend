@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -19,6 +19,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import Header from "../NavBarComponents/header";
+import AboutUsPage from "../NavBarComponents/Aboutus";
+import OurVisionPage from "../NavBarComponents/vision";
+import Services from "../NavBarComponents/services";
+import Contact from "../NavBarComponents/contact";
+import Footer from "../NavBarComponents/footer";
 
 function ScrollTop(props) {
   const { children, window } = props;
@@ -67,11 +73,10 @@ ScrollTop.propTypes = {
 const pages = [
   { name: "Login", path: "/login" },
   { name: "Signup", path: "/signup" },
-  { name: "Help", path: "/signup" },
+  { name: "Help", path: "/chat" },
 ];
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 export default function BackToTop(props) {
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -92,7 +97,7 @@ export default function BackToTop(props) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="static" sx={{background:"rgb(42 143 52)"}}>
+      <AppBar position="static" sx={{ background: "rgb(42 143 52)" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters id="back-to-top-anchor">
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -144,7 +149,13 @@ export default function BackToTop(props) {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page.path} onClick={handleCloseNavMenu}>
+                  <MenuItem
+                    key={page.path}
+                    onClick={() => {
+                      navigate(page.path); // Navigate to the page's path
+                      handleCloseNavMenu(); // Close the navigation menu
+                    }}
+                  >
                     <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 ))}
@@ -164,7 +175,7 @@ export default function BackToTop(props) {
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 color: "inherit",
-                background:"rgb(42 143 52)",
+                background: "rgb(42 143 52)",
                 textDecoration: "none",
               }}
             >
@@ -183,50 +194,16 @@ export default function BackToTop(props) {
                 </Button>
               ))}
             </Box>
-
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
           </Toolbar>
         </Container>
       </AppBar>
       <Container>
-        <Box>
-          {[...new Array(30)]
-            .map(
-              () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-            )
-            .join("\n")}
-        </Box>
+        <Header />
+        <AboutUsPage />
+        <OurVisionPage />
+        <Services />
+        <Contact />
+        <Footer />
       </Container>
       <ScrollTop {...props}>
         <Fab

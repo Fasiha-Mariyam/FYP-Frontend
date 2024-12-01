@@ -32,6 +32,7 @@ import { dispatch, useSelector } from "../../../redux/store";
 import { setStorageItem, validateEmail } from "../../../utils/helper_functions";
 
 import { useMediaQuery } from "@mui/material";
+import { signUp } from "../../../redux/slices/auth";
 
 const Login = () => {
   //styles
@@ -40,18 +41,24 @@ const Login = () => {
   // states...
   const navigate = useNavigate();
   const { isLoading } = useSelector((state) => state.auth);
+  const [isDriver, setIsDriver] = useState(false);
+  const [isUser, setIsUser] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);
   const [showPassword, setShowPassword] = React.useState(false);
-  const is900Less = useMediaQuery("(max-width:900px)");
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [role, setRole] = React.useState("");
   const [emaiIsValid, setEmailIsValid] = React.useState(false);
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [isEmailDirty, setIsEmailDirty] = React.useState(false);
   const [isPasswordDirty, setIsPasswordDirty] = React.useState(false);
-
   const { enqueueSnackbar } = useSnackbar();
-
+  // Mocked demo data based on roles
+  const demoUsers = [
+    { email: "student@gmail.com", password: "password123", role: "student" },
+    { email: "driver@gmail.com", password: "password123", role: "driver" },
+    { email: "admin@gmail.com", password: "password123", role: "admin" },
+  ];
   //functions
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -77,8 +84,8 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("clicked");
     e.preventDefault();
+
     if (!email.trim() || !password.trim()) {
       return enqueueSnackbar(
         `Please enter ${!email.trim() ? "Email" : "Password"} `,
@@ -89,27 +96,43 @@ const Login = () => {
       );
     }
 
-    try {
-      // const res = await dispatch(
-      //   signIn({ email, password, superadmin: isAdmin })
-      // );
+   
+    const user = demoUsers.find(
+      (u) => u.email === email && u.password === password
+    );
+    console.log(user, "user");
+    if (user) {
 
-      // if (res?.status === 200) {
-      //   enqueueSnackbar("Login successfully", {
-      //     autoHideDuration: 3000,
-      //     variant: "success",
-      //   });
+      // Dispatch the user object with role to Redux
+      dispatch(signUp(user));
 
-      //   await setStorageItem("user", res?.data);
-      navigate("/dashboard");
-      // } else {
-      //   enqueueSnackbar(`${res?.message}`, {
-      //     autoHideDuration: 3000,
-      //     variant: "error",
-      //   });
-      // }
-    } catch (e) {
-      console.log(e);
+      // Save the user object with role to localStorage
+      await setStorageItem("user", user);
+
+      switch (user.role) {
+        case 'student':
+          navigate('/student/dashboard');
+          break;
+        case 'teacher':
+          navigate('/teacher/dashboard');
+          break;
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        default:
+          navigate('/');
+          break;
+      }
+
+      enqueueSnackbar("Login successfully", {
+        autoHideDuration: 3000,
+        variant: "success",
+      });
+    } else {
+      enqueueSnackbar("Invalid email or password", {
+        autoHideDuration: 3000,
+        variant: "error",
+      });
     }
   };
 
@@ -159,7 +182,6 @@ const Login = () => {
         <Box
           sx={{
             ...loginRight,
-            ml: is900Less ? 20 : 0,
             mr: "auto",
           }}
         >
@@ -172,7 +194,18 @@ const Login = () => {
               marginRight: "auto",
             }}
           >
-            <LoginTabs {...{ isAdmin, setIsAdmin, setEmail, setPassword }} />
+            <LoginTabs
+              {...{
+                isAdmin,
+                setIsAdmin,
+                setEmail,
+                setPassword,
+                setIsDriver,
+                isDriver,
+                isUser,
+                setIsUser,
+              }}
+            />
             <Box
               sx={{
                 width: { xs: "300px", md: "30vw" },
@@ -338,45 +371,47 @@ const Login = () => {
                 ) : (
                   ""
                 )}
-                {!isAdmin ? (
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 500,
-                      marginTop: 10,
-                      color: "#303468",
-                      fontFamily: "Poppins",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      navigate("/recoverpassword");
-                    }}
-                  >
-                    Forgot Password{" "}
-                  </p>
+                {!isAdmin && isUser ? (
+                  <>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: 500,
+                        marginTop: 10,
+                        color: "#303468",
+                        fontFamily: "Poppins",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        navigate("/recoverpassword");
+                      }}
+                    >
+                      Forgot Password{" "}
+                    </p>
+                    <Box sx={{ mt: 1 }}>
+                      <Typography>
+                        Don't have an account{" "}
+                        <Link
+                          to="/signup"
+                          style={{
+                            textDecoration: "none",
+                            color: "rgb(42 141 59)",
+                          }}
+                        >
+                          <span>Register</span>
+                        </Link>
+                      </Typography>
+                    </Box>
+                  </>
                 ) : null}
 
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    flexDirection:"column"
+                    flexDirection: "column",
                   }}
                 >
-                   <Box sx={{ mt: 1 }}>
-                    <Typography>
-                      Don't have an account{" "}
-                      <Link
-                        to="/signup"
-                        style={{
-                          textDecoration: "none",
-                          color: "rgb(42 141 59)",
-                        }}
-                      >
-                        <span>Register</span>
-                      </Link>
-                    </Typography>
-                  </Box>
                   <Button
                     type="submit"
                     sx={loginButton}

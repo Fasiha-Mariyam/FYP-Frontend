@@ -23,21 +23,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useLocation, useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useMediaQuery } from "@mui/material";
 //pictures
-import CouponWhite from "../../assets/images/Group 1171275614.png";
-import CouponBlue from "../../assets/images/Group 1171275613.png";
-import CustomerWhite from "../../assets/images/Group 1171275486.png";
-import CustomerBlue from "../../assets/images/Group 1171275485.png";
-import DashboardWhite from "../../assets/images/Group 1171275462.png";
-import DashboardBlue from "../../assets/images/Group 1171275463.png";
-import PartnerWhite from "../../assets/images/Vector-13.png";
-import PartnerBlue from "../../assets/images/Vector-14.png";
 import Logo from "../../assets/images/logo1.png";
-import loggedout from "../../assets/images/loggedout.png";
-import style from "../../assets/images/style=fill.png";
-import Ellipse from "../../assets/images/Ellipse 9.png";
-import SmallScreenBtn from "./SmallScreenBtn";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import BusAlertIcon from '@mui/icons-material/BusAlert';
+import DepartureBoardIcon from '@mui/icons-material/DepartureBoard';
+import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
+import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
+import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
 //Sidebar is working now
 const drawerWidth = 240;
 
@@ -114,28 +110,28 @@ function Sidebar(props) {
 
   const roleBasedPages = {
     student: [
-      { name: "Dashboard", path: "/student/dashboard" },
-      { name: "Add-Request", path: "/student/createRequest" },
-      { name: "All-Request", path: "/student/allRequests" },
-      { name: "Teacher-Proposals", path: "/student/teacherProposals" },
-      { name: "Connections", path: "/student/allConnections" },
+      { name: "Dashboard", path: "/student/dashboard", icon: <DashboardIcon /> },
+      { name: "Card Form", path: "/student/request",icon: <CreditCardIcon />  },
+      { name: "Point Routes", path: "/student/pointInformation",icon: <BusAlertIcon />  },
+      { name: "Feedback", path: "/student/feedback",icon: <FeedbackOutlinedIcon />  },
+      { name: "Tracking", path: "/student/pointTracking",icon: <DepartureBoardIcon />  },
     ],
-    teacher: [
-      { name: "Dashboard", path: "/teacher/dashboard" },
-      { name: "All-Requests", path: "/teacher/StudentRequests" },
-      { name: "All-Proposals", path: "/teacher/allProposals" },
-      { name: "Connections", path: "/teacher/Connections" },
+    driver: [
+      { name: "Dashboard", path: "/driver/dashboard", icon: <DashboardIcon /> },
+      { name: "Select Point", path: "/driver/share-location",icon: <DepartureBoardIcon />  },
     ],
     admin: [
-      { name: "Dashboard", path: "/admin/dashboard" },
-      { name: "Student Details", path: "/admin/allStudents" },
-      { name: "Teacher Details", path: "/admin/allTeachers" },
-      { name: "All-Connections", path: "/admin/allConnections" },
-    ],
+      { name: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon /> },
+      { name: "Card Requests", path: "/admin/cardRequest", icon: <CreditCardIcon /> },
+      { name: "Update Route", path: "/admin/routeInfo", icon: <DirectionsBusOutlinedIcon /> },
+      { name: "Complaints", path: "/admin/complain", icon: <FeedbackOutlinedIcon /> },
+      { name: "Form Deadline", path: "/admin/formDeadline", icon: <FeedbackOutlinedIcon /> },
+      ],
   };
 
   const pages = roleBasedPages[role];
   const currentPage = pages.find((page) => page.path === location.pathname);
+  
   const currentPageName = currentPage ? currentPage.name : "Dashboard";
   const handlePageNavigation = (path) => {
     navigate(path);
@@ -166,7 +162,8 @@ function Sidebar(props) {
               my: 2,
               backgroundColor:
                 location.pathname === page.path ? "white" : "transparent",
-              color: location.pathname === page.path ? "#3F51B5" : "white",
+              color:
+                location.pathname === page.path ? "rgb(42 141 58)" : "white",
               boxShadow:
                 location.pathname === page.path
                   ? "5px 5px 5px 5px rgba(0, 0, 0, 0.1)" // Add shadow when active
@@ -190,15 +187,11 @@ function Sidebar(props) {
                   minWidth: 0,
                   ml: 2,
                   mr: 1,
-                  color: "white",
+                  color: location.pathname === page.path ? "green" : "white",
                   justifyContent: "center",
                 }}
               >
-                {location.pathname === page.path ? (
-                  <img src={page.iconBlue} alt="" />
-                ) : (
-                  <img src={page.iconWhite} alt="" />
-                )}
+                {page.icon}
               </ListItemIcon>
               <ListItemText
                 primary={page.name}
@@ -210,7 +203,7 @@ function Sidebar(props) {
       </List>
     </div>
   );
-
+ 
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -256,21 +249,15 @@ function Sidebar(props) {
 
           {!isMobile && (
             <div>
-              {/* Add your three icons here */}
-              <IconButton color="inherit" aria-label="icon1">
-                <img src={loggedout} alt="" />
-              </IconButton>
-              <IconButton color="inherit" aria-label="icon2">
-                <img src={style} alt="" />
-              </IconButton>
-              <IconButton color="inherit" aria-label="icon3">
-                <img src={Ellipse} alt="" />
+              <IconButton color="inherit" aria-label="icon1" onClick={logout}>
+                <LogoutIcon />
               </IconButton>
             </div>
           )}
           {isMobile && (
-            <IconButton aria-label="small-screen-btn" sx={{ pr: 0 }}>
-              <SmallScreenBtn />
+            <IconButton aria-label="small-screen-btn" sx={{ pr: 0 }} onClick={logout}>
+              {/* <SmallScreenBtn /> */}
+              <LogoutIcon />
             </IconButton>
           )}
         </Toolbar>
@@ -286,7 +273,7 @@ function Sidebar(props) {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
-            background: "#3F51B5",
+            background: "rgb(42 141 58)",
           },
         }}
       >
