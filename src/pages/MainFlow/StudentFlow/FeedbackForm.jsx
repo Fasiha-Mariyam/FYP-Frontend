@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
-import { useSnackbar } from "notistack"; // Import useSnackbar from notistack
+import { useSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
+import { submitFeedback } from "../../../redux/slices/feedback";
 
 export default function FeedbackForm() {
-  const { enqueueSnackbar } = useSnackbar(); // Initialize Snackbar hook
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
-    type: "Feedback", 
+    type: "feedback",
     message: "",
   });
-  const [loading, setLoading] = useState(false); 
+
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -22,55 +27,38 @@ export default function FeedbackForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Validation checks
-      if (
-        !formData.name ||
-        !formData.email ||
-        !formData.message
-      ) {
-        enqueueSnackbar(`Please fill all the required fields`, {
-          autoHideDuration: 3000,
-          variant: "warning",
-        });
-        return;
-      } else if (/^\d/.test(formData.name)) {
-        enqueueSnackbar(`Name should not start with a number`, {
-          autoHideDuration: 3000,
+      if (!formData.email || !formData.message) {
+        enqueueSnackbar("Please fill all the required fields", {
           variant: "warning",
         });
         return;
       } else if (!formData.email.includes("@")) {
-        enqueueSnackbar(`Please enter a valid email address`, {
-          autoHideDuration: 3000,
+        enqueueSnackbar("Please enter a valid email address", {
           variant: "warning",
         });
         return;
+      }
+
+      setLoading(true);
+
+      const result = await dispatch(submitFeedback(formData)); // Await the result
+
+      console.log(result, "result"); // Debugging
+
+      if (result.success) {
+        enqueueSnackbar("Request submitted successfully", {
+          variant: "success",
+        });
+        setFormData({  email: "", type: "feedback", message: "" });
       } else {
-        setLoading(true);
-
-        setTimeout(() => {
-          setLoading(false);
-          enqueueSnackbar(`Request submitted successfully`, {
-            autoHideDuration: 3000,
-            variant: "success",
-          });
-
-          // Reset form after successful submission
-          setFormData({
-            name: "",
-            email: "",
-            type: "Feedback",
-            message: "",
-          });
-        }, 2000); // Simulate a 2-second delay for submission
+        enqueueSnackbar("Request not submitted successfully", {
+          variant: "error",
+        });
       }
     } catch (error) {
+      enqueueSnackbar("Something went wrong", { variant: "error" });
+    } finally {
       setLoading(false);
-      enqueueSnackbar(`Request not submitted successfully`, {
-        autoHideDuration: 3000,
-        variant: "error",
-      });
-      console.error(error);
     }
   };
 
@@ -93,20 +81,10 @@ export default function FeedbackForm() {
     >
       <Typography
         variant="h4"
-        component="h1"
         sx={{ mb: 2, fontWeight: "bold", color: "#2A8D3B" }}
       >
         Feedback / Complaint Form
       </Typography>
-
-      <TextField
-        label="Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        fullWidth
-        sx={{ mb: 2 }}
-      />
 
       <TextField
         label="Email"
@@ -117,7 +95,6 @@ export default function FeedbackForm() {
         fullWidth
         sx={{ mb: 2 }}
       />
-
       <TextField
         label="Type"
         name="type"
@@ -127,10 +104,9 @@ export default function FeedbackForm() {
         fullWidth
         sx={{ mb: 2 }}
       >
-        <MenuItem value="Feedback">Feedback</MenuItem>
-        <MenuItem value="Complaint">Complaint</MenuItem>
+        <MenuItem value="feedback">Feedback</MenuItem>
+        <MenuItem value="complaint">Complaint</MenuItem>
       </TextField>
-
       <TextField
         label="Message"
         name="message"
@@ -141,7 +117,6 @@ export default function FeedbackForm() {
         fullWidth
         sx={{ mb: 2 }}
       />
-
       <Button
         type="submit"
         variant="contained"

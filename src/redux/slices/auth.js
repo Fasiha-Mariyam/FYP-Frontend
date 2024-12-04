@@ -98,7 +98,7 @@ export function signUp(user) {
     try {
       // Simulated mock response
       const mockResponse = {
-        id: "12345",
+        id: user.id,
         email: user.email,
         role: user.role || "student",
         name: user.name || "John Doe",

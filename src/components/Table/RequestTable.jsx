@@ -227,7 +227,6 @@ export default function RequestsTable({ rows }) {
       confirmButtonText: "Yes, accept it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Dispatch the changeStatus action
         dispatch(changeStatus(id, "accepted"));
         Swal.fire({
           title: "Accepted!",

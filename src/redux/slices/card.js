@@ -38,6 +38,13 @@ const slice = createSlice({
       );
       state.allRequests = updatedRequests;
     },
+    setAllRequestsToPending(state) {
+      // Change all statuses in the allRequests array to 'pending'
+      state.allRequests = state.allRequests.map((request) => ({
+        ...request,
+        status: "pending",
+      }));
+    },
     resetCard: () => initialState,
   },
 });
@@ -93,5 +100,11 @@ export function changeStatus(id, newStatus) {
   return (dispatch) => {
     dispatch(slice.actions.updateStatus({ id, status: newStatus }));
     console.log(`Status updated for ID ${id}: ${newStatus}`);
+  };
+}
+export function changeAllStatusesToPending() {
+  return (dispatch) => {
+    dispatch(slice.actions.setAllRequestsToPending());
+    console.log("All statuses set to 'pending'");
   };
 }

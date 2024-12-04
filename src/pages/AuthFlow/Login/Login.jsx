@@ -55,9 +55,26 @@ const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   // Mocked demo data based on roles
   const demoUsers = [
-    { email: "student@gmail.com", password: "password123", role: "student" },
-    { email: "driver@gmail.com", password: "password123", role: "driver" },
-    { email: "admin@gmail.com", password: "password123", role: "admin" },
+    {
+      id: 1,
+      email: "20f-m-bscs-12@students.duet.edu.pk",
+      password: "password123",
+      role: "student",
+    },
+    {
+      id: 2,
+      email: "20f-m-bscs-13@students.duet.edu.pk",
+      password: "password123",
+      role: "student",
+    },
+    {
+      id: 3,
+      email: "20f-m-bscs-31@students.duet.edu.pk",
+      password: "password123",
+      role: "student",
+    },
+    { id:4,email: "driver@gmail.com", password: "password123", role: "driver" },
+    { id:5,email: "admin@gmail.com", password: "password123", role: "admin" },
   ];
   //functions
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -85,57 +102,65 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!email.trim() || !password.trim()) {
       return enqueueSnackbar(
-        `Please enter ${!email.trim() ? "Email" : "Password"} `,
+        `Please enter ${!email.trim() ? "Email" : "Password"}`,
         {
           autoHideDuration: 3000,
           variant: "warning",
         }
       );
     }
-
-   
+  
     const user = demoUsers.find(
       (u) => u.email === email && u.password === password
     );
     console.log(user, "user");
+  
     if (user) {
-
       // Dispatch the user object with role to Redux
       dispatch(signUp(user));
-
+  
       // Save the user object with role to localStorage
       await setStorageItem("user", user);
-
+  
+      // Navigate based on user role
       switch (user.role) {
-        case 'student':
-          navigate('/student/dashboard');
+        case "student":
+          navigate("/student/dashboard");
           break;
-        case 'teacher':
-          navigate('/teacher/dashboard');
+        case "teacher":
+          navigate("/teacher/dashboard");
           break;
-        case 'admin':
-          navigate('/admin/dashboard');
+        case "admin":
+          navigate("/admin/dashboard");
           break;
         default:
-          navigate('/');
+          navigate("/");
           break;
       }
-
+  
       enqueueSnackbar("Login successfully", {
         autoHideDuration: 3000,
         variant: "success",
       });
     } else {
-      enqueueSnackbar("Invalid email or password", {
-        autoHideDuration: 3000,
-        variant: "error",
-      });
+  
+      if (isUser == true) {
+        enqueueSnackbar("Use university provided email or password", {
+          autoHideDuration: 3000,
+          variant: "error",
+        });
+      } else {
+        enqueueSnackbar("Invalid email or password", {
+          autoHideDuration: 3000,
+          variant: "error",
+        });
+      }
     }
   };
-
+  
   return (
     <Grid container component="main" spacing={0} sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -371,39 +396,6 @@ const Login = () => {
                 ) : (
                   ""
                 )}
-                {!isAdmin && isUser ? (
-                  <>
-                    <p
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 500,
-                        marginTop: 10,
-                        color: "#303468",
-                        fontFamily: "Poppins",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        navigate("/recoverpassword");
-                      }}
-                    >
-                      Forgot Password{" "}
-                    </p>
-                    <Box sx={{ mt: 1 }}>
-                      <Typography>
-                        Don't have an account{" "}
-                        <Link
-                          to="/signup"
-                          style={{
-                            textDecoration: "none",
-                            color: "rgb(42 141 59)",
-                          }}
-                        >
-                          <span>Register</span>
-                        </Link>
-                      </Typography>
-                    </Box>
-                  </>
-                ) : null}
 
                 <Box
                   sx={{

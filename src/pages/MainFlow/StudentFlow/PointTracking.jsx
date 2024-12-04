@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 
 export default function PointTracking() {
+  
   const [userLocation, setUserLocation] = useState(null); // User's location
   const [pointLocation, setPointLocation] = useState(null); // Current selected point's location
   const [selectedPoint, setSelectedPoint] = useState(null); // Selected point index

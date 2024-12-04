@@ -29,6 +29,9 @@ const PartnerForm = ({
   chalaanImage,
   loading,
 }) => {
+
+  console.log(submittedData,"imgg");
+  
   return (
     <Container maxWidth="lg">
       <Box
@@ -59,7 +62,7 @@ const PartnerForm = ({
               Form submitted, wait for admin approval.
             </Typography>
           </Box>
-        ) : backend === "approved" ? (
+        ) : backend === "accepted" ? (
           <Box
             sx={{
               display: "flex",
@@ -91,7 +94,7 @@ const PartnerForm = ({
                 }}
               >
                 <img
-                  src={URL.createObjectURL(submittedData.studentImage)}
+                  src={submittedData.previewStudentImage}
                   alt="Student"
                   style={{
                     width: "120px", // Slightly larger image to match ID card style

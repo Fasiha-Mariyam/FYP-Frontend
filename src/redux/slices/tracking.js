@@ -1,79 +1,73 @@
 import { createSlice } from "@reduxjs/toolkit";
-// utils
-import axios from "axios";
-import { dispatch } from "../store";
 
-// ----------------------------------------------------------------------
-
+// Initial state
 const initialState = {
+  pointLocation: [
+    { id: "point1", location: null },
+    { id: "point2", location: null },
+    { id: "point3", location: null },
+    { id: "point4", location: null },
+    { id: "point5", location: null },
+    { id: "point6", location: null },
+    { id: "point7", location: null },
+    { id: "point8", location: null },
+    { id: "point9", location: null },
+    { id: "point10", location: null },
+  ],
+  isLoading: false,
   error: null,
-  points: [],
-  isLoader: false
 };
 
 const slice = createSlice({
-  name: "auth",
+  name: "tracking",
   initialState,
   reducers: {
-    // START LOADING
-    startLoader(state) {
-      state.isLoader = true;
+    // Start loading
+    startLoading(state) {
+      state.isLoading = true;
+      state.error = null;
     },
 
-    // HAS ERROR
+    // Handle error
     hasError(state, action) {
-      state.isLoader = false;
+      state.isLoading = false;
       state.error = action.payload;
     },
 
-    // GET EVENTS
-    getSigninSuccess(state, action) {
-      state.isLoader = false;
-      state.error = null;
-      state.user = action.payload;
+    // Update a specific point's location
+    updatePointLocation(state, action) {
+      const { id, location } = action.payload;
+      const point = state.pointLocation.find((p) => p.id === id);
+      if (point) {
+        point.location = location;
+      }
+      state.isLoading = false;
     },
 
-    getSignUpSuccess(state, action) {
-      state.isLoader = false;
-      state.error = null;
-      state.signup = action.payload;
+    // Reset pointLocation to initial state
+    resetpointLocation() {
+      return initialState;
     },
-
-    resetTracking: () => initialState
-  }
+  },
 });
 
 // Reducer
 export default slice.reducer;
 
 // Actions
-export const { getSigninSuccess, resetAuth } = slice.actions;
+export const { startLoading, hasError, updatePointLocation, resetpointLocation } =
+  slice.actions;
 
-// ----------------------------------------------------------------------
-
-export function signUp(user) {
+// Async function to simulate fetching location data and updating the point
+export function setPointLocation(id, latitude, longitude) {
   return async (dispatch) => {
-    dispatch(slice.actions.startLoader());
-
+    dispatch(startLoading());
     try {
-      // Simulated mock response
-      const mockResponse = {
-        id: "12345",
-        email: user.email,
-        role: user.role || "student",
-        name: user.name || "John Doe",
-      };
-
-      // Simulate delay
+      // Simulate an API call delay
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      dispatch(slice.actions.getSignUpSuccess(mockResponse));
-      return mockResponse;
-    } catch {
-      const error = { message: "Simulated error occurred" };
-      dispatch(slice.actions.hasError(error));
-      return error;
+      dispatch(updatePointLocation({ id, location: [latitude, longitude] }));
+    } catch (error) {
+      dispatch(hasError(error.message || "Failed to update point location"));
     }
   };
 }
-

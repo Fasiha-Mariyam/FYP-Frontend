@@ -72,7 +72,6 @@ ScrollTop.propTypes = {
 };
 const pages = [
   { name: "Login", path: "/login" },
-  { name: "Signup", path: "/signup" },
   { name: "Help", path: "/chat" },
 ];
 export default function BackToTop(props) {

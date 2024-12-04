@@ -33,7 +33,7 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: "email", numeric: false, disablePadding: true, label: "Email" },
   { id: "type", numeric: false, disablePadding: true, label: "Type" },
-  { id: "request", numeric: false, disablePadding: false, label: "Complain/Feedback" },
+  { id: "message", numeric: false, disablePadding: false, label: "Complain/Feedback" },
   { id: "reply", numeric: false, disablePadding: false, label: "Reply" }, // New column for reply
 ];
 
@@ -150,7 +150,7 @@ export default function ComplainTable({ data }) {
                   <TableRow key={index}>
                     <TableCell>{row.email}</TableCell>
                     <TableCell>{row.type}</TableCell>
-                    <TableCell>{row.request}</TableCell>
+                    <TableCell>{row.message}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"

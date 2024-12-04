@@ -27,7 +27,7 @@ const { dispatch } = store;
 export function logOut() {
   return async () => {
     await dispatch(resetAuth());
-    // await dispatch(resetCard());
+    // await dispatch(resetCard());  
     await persistor.purge();
     await localStorage.clear();
   };

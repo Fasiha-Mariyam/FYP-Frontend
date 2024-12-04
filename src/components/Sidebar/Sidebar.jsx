@@ -26,7 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useMediaQuery } from "@mui/material";
 //pictures
-import Logo from "../../assets/images/logo1.png";
+import Logo from "../../assets/images/LogoBus.png";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import BusAlertIcon from '@mui/icons-material/BusAlert';
@@ -140,7 +140,7 @@ function Sidebar(props) {
   const drawer = (
     <div>
       <DrawerHeader>
-        <img src={Logo} alt="" height={isSmallScreen ? 50 : 40} />
+        <img src={Logo} alt="" height={isSmallScreen ? 180 : 130} />
         {!isSmallScreen && (
           <IconButton onClick={handleDrawerToggle}>
             {theme.direction === "ltr" ? (

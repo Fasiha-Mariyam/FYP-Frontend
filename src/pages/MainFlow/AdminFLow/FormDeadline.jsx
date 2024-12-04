@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../components/Modal/ConfirmationModal"; // Import the new modal component
+import { changeAllStatusesToPending } from "../../../redux/slices/card";
+import { dispatch } from "../../../redux/store";
 
 export default function FormDeadline() {
   const { enqueueSnackbar } = useSnackbar();
@@ -68,6 +70,7 @@ export default function FormDeadline() {
       autoHideDuration: 3000,
       variant: "success",
     });
+    dispatch(changeAllStatusesToPending());
     setOpenModal(false); // Close modal
   };
 
